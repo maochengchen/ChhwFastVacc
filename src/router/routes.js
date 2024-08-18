@@ -10,8 +10,19 @@ import Icons from "@/pages/Icons.vue";
 import Maps from "@/pages/Maps.vue";
 import Typography from "@/pages/Typography.vue";
 import TableList from "@/pages/TableList.vue";
+import Login from "@/pages/Login.vue";
+import VaccOverView from "@/pages/VaccOverView.vue";
 
 const routes = [
+  {
+    path: '/',
+    redirect: '/login',
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+  },
   {
     path: "/",
     component: DashboardLayout,
@@ -52,6 +63,11 @@ const routes = [
         name: "table-list",
         component: TableList,
       },
+      {
+        path: "vaccoverview",
+        name: "vaccoverview",
+        component: VaccOverView,
+      },
     ],
   },
   { path: "*", component: NotFound },
@@ -65,5 +81,7 @@ function view(name) {
    var res= require('../components/Dashboard/Views/' + name + '.vue');
    return res;
 };**/
+
+
 
 export default routes;
