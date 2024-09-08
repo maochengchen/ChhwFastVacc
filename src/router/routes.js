@@ -65,7 +65,7 @@ const routes = [
       },
       {
         path: "vaccoverview",
-        name: "vaccoverview",
+        name: "疫苗施打",
         component: VaccOverView,
       },
     ],

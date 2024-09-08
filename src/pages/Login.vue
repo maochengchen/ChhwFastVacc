@@ -22,6 +22,7 @@
   <script>
   import axios from 'axios';
   import router from '../router';
+  import { loginApi,GetToken,DivisionData,CheckVacc } from '@/api';
   
   export default {
     data() {
@@ -34,19 +35,31 @@
     methods: {
       async login() {
         try {
-            const response = await axios.get('/api/api-health-check');
-            console.log(response.data);
-        //   const response = await axios.post('https://your-api-url.com/login', {
-        //     username: this.username,
-        //     password: this.password,
-        //   });
-  
-          if (response.data.success) {
-            localStorage.setItem('token', 'token');
+          // const response = await GetToken();
+          // console.log(response);
+          // if(response.status===200)
+          //   localStorage.setItem('token', response.data);
+          // else
+          //   throw "連線失敗";
+
+          // var div = await DivisionData();
+          // console.log(div);
+          
+          
+          
+          var login =await loginApi(this.username,this.password);
+          console.log(login);
+          
+          if(login.data.success){
+            localStorage.setItem('token', login.data.result.token);
             router.push({ path: '/dashboard' });
           }
+          else
+            throw login.data.message;
+          
+
         } catch (error) {
-          this.errorMessage = 'Invalid username or password.';
+          this.errorMessage = error;
         }
       },
     },

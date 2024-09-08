@@ -1,6 +1,9 @@
 <template>
-    <card class="card" title="Edit Profile">
+    <card class="card" >
       <div>
+        
+        <div style="text-align: right;"><VaccSetting></VaccSetting></div>
+        
         <b-table :items="items" :fields="fields" striped responsive="sm">
         <template #cell(show_details)="row">
           <b-button size="sm" @click="row.toggleDetails" class="mr-2">
@@ -34,7 +37,12 @@
   </template>
   
   <script>
+  import VaccSetting from './VaccSetting.vue';
     export default {
+      components:{
+        VaccSetting
+
+      },
       data() {
         return {
           fields: ['first_name', 'last_name', 'show_details'],

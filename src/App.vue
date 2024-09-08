@@ -37,4 +37,17 @@ export default {};
     transform: scale(1.2, 0.7);
   }
 }
+
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.3) !important; /* 颜色可以根据需求调整 */
+}
+.form-control{
+  border: 1px solid #ebebeb!important;
+}
+
+.form-control[readonly]{
+  background-color: #ffffff !important;
+  color: gray !important;
+}
+
 </style>
