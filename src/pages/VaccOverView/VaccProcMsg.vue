@@ -1,5 +1,5 @@
 <template>
-  <card class="card" title="系統訊息">
+  <card class="card" title="系統訊息" style="height: 500px;">
     <div>
       <textarea
                 rows="18"

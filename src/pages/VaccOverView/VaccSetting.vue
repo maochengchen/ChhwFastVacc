@@ -98,12 +98,17 @@
 import DivisionPickBoard from "../Board/DivisionPickBoard.vue";
 import { CheckVacc, GetICD, GetDoctor } from "@/api";
 export default {
+  prop:{
+    vaccMsg:"未設定疫苗資訊"
+  },
   components: {
     DivisionPickBoard,
   },
   created() {
     // 組件初始化後立即執行某個方法
+    this.settingMsg.codeinfo="未設定疫苗資訊";
     this.loadVaccSet();
+    
   },
   data() {
     return {

@@ -50,6 +50,11 @@ export const GetICD = (icdcode) => {
   return apiClient.post(`/api/Vacc/GetICD?icd=${icdcode}`);
 };
 
+export const GetPatientInfo = (idno) => {
+  console.log(idno);
+  return apiClient.post(`/api/Vacc/GetPatientInfo?idno=${idno}`);
+};
+
 
 export const GetToken = () => {
   return apiClient.post("/Auth/RegMachineLogin", {
