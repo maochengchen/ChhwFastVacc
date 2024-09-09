@@ -110,7 +110,7 @@ export default {
     return {
       isDivisionModalShow: false,
       selectedData: null,
-      vaccmsg: "ABC123,A000,次劑量:1,天數:1,總量:1,科別:02,身分:健保,醫師:S029",
+      vaccmsg: "未設定疫苗資訊!",
       oridata: "",
       vaccset: {
         code: "",
@@ -171,6 +171,7 @@ export default {
       總量:${this.vaccset.tqty},
       身分:${this.ptTypes.filter(x=>x.value==this.vaccset.ptType)[0].text},
       醫師:${this.vaccset.doctor}`;
+      localStorage.setItem('vaccSet', this.vaccset);
       this.show = false;
     }
   },
