@@ -2,7 +2,7 @@
   <card class="card" title="系統訊息">
     <div>
       <textarea
-                rows="20"
+                rows="18"
                 class="form-control border-input"
                 v-model="memo"
                 readonly

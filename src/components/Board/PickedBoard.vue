@@ -1,25 +1,12 @@
 <template>
   <div>
     <!-- 模态框 -->
-    <b-modal
-      v-model="isVisible"
-      :title="title"
-      @hide="resetModal"
-      :size="size"
-    >
+    <b-modal scrollable v-model="isVisible" :title="title" @hide="resetModal" :size="size">
       <!-- 输入框 -->
-      <b-form-input
-        v-model="keyword"
-        @input="filterData"
-        style="width: 120px"
-      />
+      <b-form-input v-model="keyword" @input="filterData" placeholder="關鍵字查詢" style="width: 120px" />
 
       <!-- 表格 -->
-      <b-table
-        :items="filteredData"
-        :fields="fields"
-        @row-dblclicked="selectData"
-      ></b-table>
+      <b-table hover :items="filteredData" :fields="fields" @row-dblclicked="selectData"></b-table>
     </b-modal>
   </div>
 </template>
@@ -42,10 +29,10 @@ export default {
     },
     width: {
       type: String,
-      default: "100px", 
+      default: "100px",
     },
-    size:{
-      default:"lg",
+    size: {
+      default: "lg",
     }
   },
   computed: {
@@ -66,20 +53,27 @@ export default {
   },
   methods: {
     filterData() {
-      
-      this.filteredData = this.data.filter((item) =>
-        item.code.toLowerCase().includes(this.keyword.toLowerCase()),
-      );
+      this.filteredData = this.data.filter((item) => {
+        var code = item.code.toLowerCase().includes(this.keyword.toLowerCase())
+        var desc = item.desc.toLowerCase().includes(this.keyword.toLowerCase())
+        return code || desc;
+      });
       console.log(this.filteredData);
     },
     selectData(item) {
       this.$emit("data-selected", item);
-      this.$emit("update:isVisible", false); 
+      this.$emit("update:isVisible", false);
     },
     resetModal() {
       this.keyword = "";
       this.filteredData = this.data;
     },
   },
+  watch: {
+    data(newVal) {
+      this.data = newVal;
+      this.resetModal();
+    }
+  }
 };
 </script>

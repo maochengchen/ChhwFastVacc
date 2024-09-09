@@ -52,7 +52,7 @@
           
           if(login.data.success){
             localStorage.setItem('token', login.data.result.token);
-            router.push({ path: '/dashboard' });
+            router.push({ path: '/vaccoverview' });
           }
           else
             throw login.data.message;

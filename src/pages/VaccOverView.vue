@@ -1,33 +1,38 @@
 <template>
   <div class="row">
-    <div class="col-12 mb-3">
-      <VaccSetting></VaccSetting>
+    <div class="col-12">
+      <VaccSetting @updateVaccSet="handleVaccSetUpdate"></VaccSetting>
     </div>
     <div class="row " style="margin: 0;">
-      <div class="col-xl-4 col-lg-5 col-md-4">
-      <VaccUser> </VaccUser>
+      <div class="column"></div>
+      <div class="col-lg-4 ">
+        <div class="d-flex" style="flex-direction: column;"></div>
+        <VaccUser> </VaccUser>
+        <VaccExcute></VaccExcute>
+      </div>
+      <div class="col-lg-8 ">
+        <VaccProcMsg :procMemo="procMemo" @memo-updated="handleMemoUpdate"> </VaccProcMsg>
+      </div>
     </div>
-    <div class="col-xl-8 col-lg-5 col-md-8">
-      <VaccProcMsg :procMemo="procMemo" @memo-updated="handleMemoUpdate"> </VaccProcMsg>
-    </div>
-    </div>
-    <button @click="changeMemo">更改系統訊息</button>
-    <p>Updated Memo: {{ procMemo }}</p>
+    <!-- <button @click="changeMemo">更改系統訊息</button>
+    <p>Updated Memo: {{ procMemo }}</p> -->
   </div>
-  
+
 </template>
 
 <script>
-import VaccList from "./VaccOverView/VaccList.vue"; 
+import VaccList from "./VaccOverView/VaccList.vue";
 import VaccSetting from "./VaccOverView/VaccSetting.vue";
 import VaccUser from "./VaccOverView/VaccUser.vue";
-import VaccProcMsg from "./VaccOverView/VaccProcMsg.vue"; 
+import VaccProcMsg from "./VaccOverView/VaccProcMsg.vue";
+import VaccExcute from "./VaccOverView/VaccExcute.vue";
 export default {
   components: {
     VaccList,
     VaccSetting,
     VaccUser,
-    VaccProcMsg
+    VaccProcMsg,
+    VaccExcute
   },
   data() {
     return {
@@ -39,9 +44,17 @@ export default {
       console.log(newMemo);
       this.procMemo = newMemo;
     },
-    changeMemo() {
-      this.procMemo += "\n"+ new Date().toLocaleTimeString() + " 新的一行訊息 " ;
+    handleVaccSetUpdate(val) {
+      console.log('handleVaccSetUpdate');
+      this.AppendMemo('更新疫苗代碼資訊!');
+    },
+    AppendMemo(message) {
+      this.procMemo += `\n${new Date().toLocaleTimeString()} ${message}`;
+    },
+    ClearMemo() {
+      this.procMemo = '';
     }
+
   }
 };
 </script>

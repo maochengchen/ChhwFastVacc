@@ -48,6 +48,7 @@ export default {};
 .form-control[readonly]{
   background-color: #ffffff !important;
   color: gray !important;
+  cursor: default !important;
 }
 
 </style>

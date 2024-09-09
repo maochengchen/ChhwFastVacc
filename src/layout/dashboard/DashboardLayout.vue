@@ -1,25 +1,16 @@
 <template>
   <div class="wrapper">
-    <side-bar>
+    <side-bar :title="title" >
       <template slot="links">
-        <sidebar-link to="/vaccoverview" name="Vacc OverView" icon="ti-panel" />
-        <sidebar-link to="/dashboard" name="Dashboard" icon="ti-panel" />
+        <sidebar-link to="/vaccoverview" name="施打作業" icon="ti-panel" />
+        <!-- <sidebar-link to="/dashboard" name="Dashboard" icon="ti-panel" />
         <sidebar-link to="/stats" name="User Profile" icon="ti-user" />
-        <sidebar-link
-          to="/table-list"
-          name="Table List"
-          icon="ti-view-list-alt"
-        />
+        <sidebar-link to="/table-list" name="Table List" icon="ti-view-list-alt" />
         <sidebar-link to="/typography" name="Typography" icon="ti-text" />
         <sidebar-link to="/icons" name="Icons" icon="ti-pencil-alt2" />
         <sidebar-link to="/maps" name="Map" icon="ti-map" />
-        <sidebar-link to="/notifications" name="Notifications" icon="ti-bell" />
-        <sidebar-link
-          to="#"
-          name="Logout"
-          icon="ti-power-off"
-          @click.native="logout"
-        />
+        <sidebar-link to="/notifications" name="Notifications" icon="ti-bell" />-->
+        <sidebar-link to="#" name="登出" icon="ti-power-off" @click.native="logout" /> 
       </template>
       <mobile-menu>
         <li class="nav-item">
@@ -28,12 +19,7 @@
             <p>Stats</p>
           </a>
         </li>
-        <drop-down
-          class="nav-item"
-          title="5 Notifications"
-          title-classes="nav-link"
-          icon="ti-bell"
-        >
+        <drop-down class="nav-item" title="5 Notifications" title-classes="nav-link" icon="ti-bell">
           <a class="dropdown-item">Notification 1</a>
           <a class="dropdown-item">Notification 2</a>
           <a class="dropdown-item">Notification 3</a>
@@ -69,6 +55,11 @@ export default {
     ContentFooter,
     DashboardContent,
     MobileMenu,
+  },
+  data() {
+    return {
+      title:'疫苗快打',
+    };
   },
   methods: {
     toggleSidebar() {

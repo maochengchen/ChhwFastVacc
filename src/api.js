@@ -7,7 +7,7 @@ const apiClient = axios.create({
     "Content-Type": "application/json",
   },
   validateStatus: function (status) {
-    // 定義範圍，例如：所有狀態碼 200 - 499 都視為成功
+    // 定義範圍，200~499 都是成功
     return status >= 200 && status < 500;
   }
 });
@@ -35,7 +35,11 @@ export const CheckVacc = (vacccode) => {
 };
 
 export const GetDiviosn = (divno) => {
-  return apiClient.post(`/api/Vacc/GetDiv?divno=${divno}`);
+  return apiClient.post(`/api/Vacc/GetDiv`);
+};
+
+export const GetIdentifyType = () => {
+  return apiClient.post(`/api/Vacc/GetIdentifyType`);
 };
 
 export const GetDoctor = (doctor) => {

@@ -2,83 +2,50 @@
   <card class="card" title="患者基本資料">
     <div>
       <div class="row">
-        <div class="col-md-12">
-          <fg-input
-            type="text"
-            label="姓名"
-            :readonly="true"
-            v-model="user.patientName"
-          >
+        <div class="col-md-6">
+          <fg-input type="text" label="姓名" :disabled="true" v-model="user.patientName">
+          </fg-input>
+        </div>
+        <div class="col-md-6">
+          <fg-input type="text" label="病歷號" :disabled="true" v-model="user.patientNo">
           </fg-input>
         </div>
         <div class="col-md-8">
-          <fg-input
-            type="text"
-            label="生日"
-            :readonly="true"
-            v-model="user.birthDate"
-          >
+          <fg-input type="text" label="生日" :disabled="true" v-model="user.birthDate">
           </fg-input>
         </div>
         <div class="col-md-4">
-          <fg-input
-            type="text"
-            label="年齡"
-            :readonly="true"
-            v-model="user.age"
-          >
+          <fg-input type="text" label="年齡" :disabled="true" v-model="user.age">
           </fg-input>
         </div>
-        <div class="col-md-6">
-          <fg-input
-            type="text"
-            label="病歷號"
-            :readonly="true"
-            v-model="user.patientNo"
-          >
-          </fg-input>
-        </div>
-        <div class="col-md-6">
-          <fg-input
-            type="text"
-            label="身分證"
-            :readonly="true"
-            v-model="user.idNo"
-          >
+
+        <div class="col-md-12">
+          <fg-input type="text" label="身分證" :disabled="true" v-model="user.idNo">
           </fg-input>
         </div>
         <div class="col-12">
-          <fg-input
-            type="text"
-            label="疫苗批號"
-            v-model="user.idNo"
-          >
-          </fg-input>
-        </div>
-        <div class="col-12">
-          <fg-input
-            type="text"
-            label="身分別"
-            v-model="user.idNo"
-          >
-          </fg-input>
-        </div>
+          <div class="d-flex" style="justify-content: space-between;align-items: center;">
+            <label style="color: #9A9A9A;">身分別</label>
+            <IdentifyTypePickBoard @identifyTypeSelected="handelIdentifySelect">123</IdentifyTypePickBoard>
+          </div>
+          <fg-input type="text" v-model="user.identifyTypeStr" readonly></fg-input> 
         
+          
+
+        </div>
+
       </div>
 
-      <b-row>
-        <b-col>
-          <b-button @click="show = true" variant="danger">異常流程</b-button>
-        </b-col>
-        <b-col>
-          <b-button @click="show = true" variant="success">正常流程</b-button>
-        </b-col>
-      </b-row>
+
     </div>
   </card>
 </template>
 <script>
+import IdentifyTypePickBoard from "../Board/IdentifyTypePickBoard.vue";
 export default {
+  components: {
+    IdentifyTypePickBoard,
+  },
   data() {
     return {
       user: {
@@ -87,13 +54,17 @@ export default {
         birthDate: "",
         idNo: "",
         age: "",
+        identifyType:"",
+        identifyTypeStr:"",
       },
     };
   },
   methods: {
-    updateProfile() {
-      alert("Your data: " + JSON.stringify(this.user));
-    },
+    handelIdentifySelect(item){
+      this.user.identifyType=item.code;
+      this.user.identifyTypeStr=item.desc;
+    }
+
   },
 };
 </script>

@@ -1,116 +1,113 @@
 <template>
   <card class="card">
     <b-row style="align-items: center">
-      <b-col style="font-size: 1rem">{{ vaccmsg }}</b-col>
-      <b-col style="text-align: right">
-        <b-button @click="show = true" variant="primary">設定疫苗資訊</b-button>
+      <b-col class="d-flex" style="align-items: center;">
+        <div style="align-items: center;flex: 1;">
+          <b-row>
+            <b-col cols="12">
+              {{settingMsg.codeinfo}}
+            </b-col>
+            <b-col cols="12">
+              {{settingMsg.vaccinfo}}
+            </b-col>
+          </b-row>
+        </div>
+        <div>
+          <b-button @click="show = true" variant="primary">設定疫苗資訊</b-button>
+        </div>
+
       </b-col>
     </b-row>
-    <b-modal
-      v-model="show"
-      centered
-      scrollable
-      title="疫苗設定"
-      :header-bg-variant="headerBgVariant"
-      :header-text-variant="headerTextVariant"
-    >
-      <b-container fluid>
-        <b-row class="mb-1 align-items-center">
-          <b-col cols="3">處置代碼</b-col>
-          <b-col>
-            <b-form-input
-              v-model="vaccset.code"
-              @focus="setOriData"
-              @keyup.enter="handleVaccCodeChange"
-              @blur="handleVaccCodeChange"
-            ></b-form-input>
-          </b-col>
-        </b-row>
-        <b-row class="mb-1 align-items-center">
-          <b-col cols="3">ICD10主診斷</b-col>
-          <b-col>
-            <b-form-input v-model="vaccset.icdCode"
-            @focus="setOriData"
-              @keyup.enter="handleIcdChange"
-              @blur="handleIcdChange"
-            ></b-form-input>
-          </b-col>
-        </b-row>
-        <b-row class="mb-1 align-items-center">
-          <b-col cols="3">次劑量</b-col>
-          <b-col>
-            <b-form-input type="number" v-model="vaccset.qty"></b-form-input>
-          </b-col>
-        </b-row>
-        <b-row class="mb-1 align-items-center">
-          <b-col cols="3">日數</b-col>
-          <b-col>
-            <b-form-input type="number" v-model="vaccset.day"></b-form-input>
-          </b-col>
-        </b-row>
-        <b-row class="mb-1 align-items-center">
-          <b-col cols="3">總量</b-col>
-          <b-col>
-            <b-form-input type="number" v-model="vaccset.tqty"></b-form-input>
-          </b-col>
-        </b-row>
-        <b-row class="mb-1 align-items-center">
-          <b-col cols="3">科別</b-col>
-          <b-col>
-            <b-form-input v-model="vaccset.divisionStr" readonly></b-form-input>
-          </b-col>
-          <b-col>
-            <DivisionPickBoard
-              v-model="isDivisionModalShow"
-              @divisionData="handleDivisionData"
-            ></DivisionPickBoard>
-          </b-col>
-        </b-row>
-        <b-row class="mb-1 align-items-center">
-          <b-col cols="3">身分</b-col>
-          <b-col>
-            <b-form-select
-              v-model="vaccset.ptType"
-              :options="ptTypes"
-            ></b-form-select>
-          </b-col>
-        </b-row>
-        <b-row class="mb-1 align-items-center">
-          <b-col cols="3">醫師</b-col>
-          <b-col>
-            <b-form-input v-model="vaccset.doctor"></b-form-input>
-          </b-col>
-        </b-row>
-      </b-container>
+
+    <b-modal v-model="show" centered scrollable title="疫苗設定" :header-bg-variant="headerBgVariant"
+      :header-text-variant="headerTextVariant" @show="loadVaccSet">
+
+
+      <b-row class="mb-1 align-items-center">
+        <b-col cols="3">處置代碼</b-col>
+        <b-col>
+          <b-form-input v-model="vaccset.code" @focus="setOriData" @keyup.enter="handleVaccCodeChange"
+            @blur="handleVaccCodeChange" required></b-form-input>
+          <b-form-invalid-feedback>處置代碼為必填</b-form-invalid-feedback>
+        </b-col>
+      </b-row>
+      <b-row class="mb-1 align-items-center">
+        <b-col cols="3">ICD10主診斷</b-col>
+        <b-col>
+          <b-form-input v-model="vaccset.icdCode" @focus="setOriData" @keyup.enter="handleIcdChange"
+            @blur="handleIcdChange"></b-form-input>
+        </b-col>
+      </b-row>
+      <b-row class="mb-1 align-items-center">
+        <b-col cols="3">次劑量</b-col>
+        <b-col>
+          <b-form-input type="number" v-model="vaccset.qty"></b-form-input>
+        </b-col>
+      </b-row>
+      <b-row class="mb-1 align-items-center">
+        <b-col cols="3">日數</b-col>
+        <b-col>
+          <b-form-input type="number" v-model="vaccset.day"></b-form-input>
+        </b-col>
+      </b-row>
+      <b-row class="mb-1 align-items-center">
+        <b-col cols="3">總量</b-col>
+        <b-col>
+          <b-form-input type="number" v-model="vaccset.tqty"></b-form-input>
+        </b-col>
+      </b-row>
+      <b-row class="mb-1 align-items-center">
+        <b-col cols="3">科別</b-col>
+        <b-col>
+          <b-form-input v-model="vaccset.divisionStr" readonly></b-form-input>
+        </b-col>
+        <b-col>
+          <DivisionPickBoard v-model="isDivisionModalShow" @divisionData="handleDivisionData"></DivisionPickBoard>
+        </b-col>
+      </b-row>
+      <b-row class="mb-1 align-items-center">
+        <b-col cols="3">身分</b-col>
+        <b-col>
+          <b-form-select v-model="vaccset.ptType" :options="ptTypes"></b-form-select>
+        </b-col>
+      </b-row>
+      <b-row class="mb-1 align-items-center">
+        <b-col cols="3">醫師</b-col>
+        <b-col>
+          <b-form-input v-model="vaccset.doctor" @focus="setOriData" @keyup.enter="handleDoctorChange"
+            @blur="handleDoctorChange"></b-form-input>
+        </b-col>
+      </b-row>
+
 
       <template #modal-footer>
         <div class="w-100">
-          <b-button
-            variant="primary"
-            size="sm"
-            class="float-right"
-            @click="handleSave"
-          >
+          <b-button variant="primary" size="sm" class="float-right" type="submit" @click="handleSave">
             存檔
           </b-button>
         </div>
       </template>
     </b-modal>
+
+
+
   </card>
 </template>
 
 <script>
 import DivisionPickBoard from "../Board/DivisionPickBoard.vue";
-import { CheckVacc,GetICD } from "@/api";
+import { CheckVacc, GetICD, GetDoctor } from "@/api";
 export default {
   components: {
     DivisionPickBoard,
   },
+  created() {
+    // 組件初始化後立即執行某個方法
+    this.loadVaccSet();
+  },
   data() {
     return {
       isDivisionModalShow: false,
-      selectedData: null,
-      vaccmsg: "未設定疫苗資訊!",
       oridata: "",
       vaccset: {
         code: "",
@@ -119,11 +116,18 @@ export default {
         day: 1,
         tqty: 1,
         division: "",
-        divisionStr:"",
+        divisionStr: "",
         ptType: "41",
         doctor: "",
+        batchNo: "",
+        batchSeq:"",
+        vaccKind:""
       },
       show: false,
+      settingMsg: {
+        codeinfo: "",
+        vaccinfo: ""
+      },
       ptTypes: [
         { value: "41", text: "健保" },
         { value: "11", text: "自費" },
@@ -137,10 +141,8 @@ export default {
       this.isDivisionModalShow = true;
     },
     handleDivisionData(data) {
-      this.vaccset.division=data.code;
-      this.vaccset.divisionStr=data.desc;
-      
-      console.log("divisiondata", data.code);
+      this.vaccset.division = data.code;
+      this.vaccset.divisionStr = data.desc;
     },
     async handleVaccCodeChange(e) {
       if (!e.target.value) return;
@@ -148,8 +150,12 @@ export default {
       var response = await CheckVacc(this.vaccset.code);
       if (!response.data.success) {
         alert(response.data.message);
-        this.vaccset.code='';
+        this.vaccset.code = '';
       }
+
+      this.vaccset.batchNo = response.data.result.batchNo;
+      this.vaccset.batchSeq = response.data.result.batchSeq;
+      this.vaccset.vaccKind = response.data.result.vaccType;
     },
     async handleIcdChange(e) {
       if (!e.target.value) return;
@@ -157,23 +163,66 @@ export default {
       var response = await GetICD(this.vaccset.icdCode);
       if (!response.data.success) {
         alert(response.data.message);
-        this.vaccset.icdCode='';
+        this.vaccset.icdCode = '';
+      }
+    },
+    async handleDoctorChange(e) {
+      if (!e.target.value) return;
+      if (e.target.value == this.oridata) return;
+      var response = await GetDoctor(this.vaccset.doctor);
+      if (!response.data.success) {
+        alert(response.data.message);
+        this.vaccset.doctor = '';
       }
     },
     setOriData(e) {
       this.oridata = e.target.value;
     },
-    handleSave(){
-      this.vaccmsg =`代碼:${this.vaccset.code},
+    loadVaccSet() {
+      const storedVaccSet = localStorage.getItem('vaccSet');
+      if (!storedVaccSet) {
+        return;
+      }
+
+      const parsedVaccSet = JSON.parse(storedVaccSet);
+      this.vaccset = parsedVaccSet;
+      this.SetVaccMsg();
+
+
+    },
+    validateVaccSet() {
+      const { code, icdCode, qty, day, tqty, division, doctor } = this.vaccset;
+
+      // 檢查是否有任何欄位為空或不正確
+      if (!code || !icdCode || qty <= 0 || day <= 0 || tqty <= 0 || !division || !doctor) {
+        return false;
+      }
+
+      return true;
+    },
+    SetVaccMsg() {
+      this.settingMsg.codeinfo = `代碼:${this.vaccset.code},
       診斷碼:${this.vaccset.icdCode},
       次劑量:${this.vaccset.qty},
       天數:${this.vaccset.day},
       總量:${this.vaccset.tqty},
-      身分:${this.ptTypes.filter(x=>x.value==this.vaccset.ptType)[0].text},
+      身分:${this.ptTypes.filter(x => x.value == this.vaccset.ptType)[0].text},
       醫師:${this.vaccset.doctor}`;
-      localStorage.setItem('vaccSet', this.vaccset);
+
+      this.settingMsg.vaccinfo=`批號:${this.vaccset.batchNo},劑次:${this.vaccset.batchSeq}`;
+    },
+    handleSave() {
+      console.log('handlesave');
+      if (!this.validateVaccSet()) {
+        alert("所有欄位都必須填寫");
+        return;
+      }
+      this.SetVaccMsg();
+      localStorage.setItem('vaccSet', JSON.stringify(this.vaccset));
       this.show = false;
-    }
+
+      this.$emit('updateVaccSet', true);
+    },
   },
   watch: {
     "vaccset.division"(newVal, oldVal) {
