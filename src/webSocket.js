@@ -15,9 +15,10 @@ class WebSocketClient {
 
     this.websocket.onmessage = (event) => {
       console.log("接收到消息: ", event.data);
-      if (this.onMessageCallback) {
-        this.onMessageCallback(event.data);
-      }
+      this.resolveMessage(event.data);
+      // if (this.onMessageCallback) {
+      //   this.onMessageCallback(event.data);
+      // }
     };
 
     this.websocket.onerror = (error) => {
@@ -30,13 +31,15 @@ class WebSocketClient {
   }
 
   // 發送消息
-  sendMessage(message, callback) {
-    this.onMessageCallback = callback;
-    if (this.websocket && this.websocket.readyState === WebSocket.OPEN) {
-      this.websocket.send(message);
-    } else {
-      console.log("WebSocket 連接未開啟");
-    }
+  sendMessage(message) {
+    return new Promise((resolve, reject) => {
+      if (this.websocket && this.websocket.readyState === WebSocket.OPEN) {
+        this.resolveMessage = resolve;  // 將 resolve 存起來，待消息回來時使用
+        this.websocket.send(message);
+      } else {
+        reject("WebSocket 連接未開啟");
+      }
+    });
   }
 
   // 關閉 WebSocket 連接

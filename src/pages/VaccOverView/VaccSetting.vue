@@ -32,6 +32,16 @@
         </b-col>
       </b-row>
       <b-row class="mb-1 align-items-center">
+        <b-col cols="3">批號</b-col>
+        <b-col cols="5">
+          <b-form-input v-model="vaccset.batchNo" ></b-form-input>
+        </b-col>
+        <b-col cols="1">劑次</b-col>
+        <b-col cols="">
+          <b-form-input v-model="vaccset.batchSeq"></b-form-input>
+        </b-col>
+      </b-row>
+      <b-row class="mb-1 align-items-center">
         <b-col cols="3">ICD10主診斷</b-col>
         <b-col>
           <b-form-input v-model="vaccset.icdCode" @focus="setOriData" @keyup.enter="handleIcdChange"
@@ -40,20 +50,31 @@
       </b-row>
       <b-row class="mb-1 align-items-center">
         <b-col cols="3">次劑量</b-col>
-        <b-col>
+        <b-col cols="3">
           <b-form-input type="number" v-model="vaccset.qty"></b-form-input>
         </b-col>
-      </b-row>
-      <b-row class="mb-1 align-items-center">
-        <b-col cols="3">日數</b-col>
-        <b-col>
+        <b-col cols="">日數</b-col>
+        <b-col cols="4">
           <b-form-input type="number" v-model="vaccset.day"></b-form-input>
         </b-col>
       </b-row>
       <b-row class="mb-1 align-items-center">
         <b-col cols="3">總量</b-col>
-        <b-col>
+        <b-col cols="3">
           <b-form-input type="number" v-model="vaccset.tqty"></b-form-input>
+        </b-col>
+        <b-col cols="">時段</b-col>
+        <b-col cols="4">
+          <b-form-select v-model="vaccset.apn" :options="apnSet"></b-form-select>
+        </b-col>
+      </b-row>
+      <b-row class="mb-1 align-items-center">
+        <b-col cols="3">診間</b-col>
+        <b-col>
+          <b-form-input  v-model="vaccset.clinic" 
+          @focus="setOriData" @keyup.enter="handleClinicChange"
+          @blur="handleClinicChange"
+          ></b-form-input>
         </b-col>
       </b-row>
       <b-row class="mb-1 align-items-center">
@@ -95,8 +116,9 @@
 </template>
 
 <script>
-import DivisionPickBoard from "../Board/DivisionPickBoard.vue";
-import { CheckVacc, GetICD, GetDoctor } from "@/api";
+import DivisionPickBoard from "@/pages/Board/DivisionPickBoard.vue";
+import LocalStorageManager from '@/LocalStorageManger';
+import { CheckVacc, GetICD, GetDoctor,GetClinic } from "@/api";
 export default {
   prop:{
     vaccMsg:"未設定疫苗資訊"
@@ -124,9 +146,11 @@ export default {
         divisionStr: "",
         ptType: "41",
         doctor: "",
+        apn:1,
         batchNo: "",
         batchSeq:"",
-        vaccKind:""
+        clinic:"",
+        vaccKind:"",
       },
       show: false,
       settingMsg: {
@@ -136,6 +160,11 @@ export default {
       ptTypes: [
         { value: "41", text: "健保" },
         { value: "11", text: "自費" },
+      ],
+      apnSet:[
+        {value:1,text:"上午"},
+        {value:2,text:"下午"},
+        {value:3,text:"晚上"}
       ],
       headerBgVariant: "info",
       headerTextVariant: "light",
@@ -157,10 +186,16 @@ export default {
         alert(response.data.message);
         this.vaccset.code = '';
       }
-
-      this.vaccset.batchNo = response.data.result.batchNo;
-      this.vaccset.batchSeq = response.data.result.batchSeq;
       this.vaccset.vaccKind = response.data.result.vaccType;
+    },
+    async handleClinicChange(e) {
+      if (!e.target.value) return;
+      if (e.target.value == this.oridata) return;
+      var response = await GetClinic(this.vaccset.clinic);
+      if (!response.data.success) {
+        alert(response.data.message);
+        this.vaccset.clinic = '';
+      }
     },
     async handleIcdChange(e) {
       if (!e.target.value) return;
@@ -184,22 +219,20 @@ export default {
       this.oridata = e.target.value;
     },
     loadVaccSet() {
-      const storedVaccSet = localStorage.getItem('vaccSet');
+      const storedVaccSet = LocalStorageManager.GetCodeInfo();
       if (!storedVaccSet) {
         return;
       }
 
-      const parsedVaccSet = JSON.parse(storedVaccSet);
-      this.vaccset = parsedVaccSet;
+      this.vaccset = storedVaccSet;
       this.SetVaccMsg();
-
 
     },
     validateVaccSet() {
-      const { code, icdCode, qty, day, tqty, division, doctor } = this.vaccset;
+      const { code, icdCode, qty, day, tqty, division, doctor,batchNo,batchSeq } = this.vaccset;
 
       // 檢查是否有任何欄位為空或不正確
-      if (!code || !icdCode || qty <= 0 || day <= 0 || tqty <= 0 || !division || !doctor) {
+      if (!code || !batchNo || !batchSeq || !icdCode || qty <= 0 || day <= 0 || tqty <= 0 || !division || !doctor) {
         return false;
       }
 
@@ -223,7 +256,7 @@ export default {
         return;
       }
       this.SetVaccMsg();
-      localStorage.setItem('vaccSet', JSON.stringify(this.vaccset));
+      LocalStorageManager.SetCodeInfo(this.vaccset);
       this.show = false;
 
       this.$emit('updateVaccSet', true);

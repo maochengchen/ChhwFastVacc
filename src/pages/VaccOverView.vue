@@ -1,13 +1,13 @@
 <template>
   <div class="row">
     <div class="col-12">
-      <VaccSetting @updateVaccSet="handleVaccSetUpdate"></VaccSetting>
+      <VaccSetting @updateVaccSet="handleVaccSetUpdate" ></VaccSetting>
     </div>
     <div class="row " style="margin: 0;">
       <div class="column"></div>
       <div class="col-lg-4 ">
         <div class="d-flex" style="flex-direction: column;"></div>
-        <VaccUser> </VaccUser>
+        <VaccUser @memo-updated="AppendMemo" @clear-memo="ClearMemo"> </VaccUser>
         <VaccExcute></VaccExcute>
       </div>
       <div class="col-lg-8 ">

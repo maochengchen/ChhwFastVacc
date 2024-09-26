@@ -46,15 +46,26 @@ export const GetDoctor = (doctor) => {
   return apiClient.post(`/api/Vacc/GetDoctor?doctor=${doctor}`);
 };
 
+export const RegProc= (reginfo)=>{
+  return apiClient.post(`/api/Vacc/RegProc`,reginfo);
+}
+
+export const SaveClinic= (clinicData)=>{
+  return apiClient.post(`/api/Vacc/SaveClinic`,clinicData);
+}
+
 export const GetICD = (icdcode) => {
   return apiClient.post(`/api/Vacc/GetICD?icd=${icdcode}`);
+};
+
+export const GetClinic = (clinic) => {
+  return apiClient.post(`api/Vacc/GetClinic?clinic=${clinic}`);
 };
 
 export const GetPatientInfo = (idno) => {
   console.log(idno);
   return apiClient.post(`/api/Vacc/GetPatientInfo?idno=${idno}`);
 };
-
 
 export const GetToken = () => {
   return apiClient.post("/Auth/RegMachineLogin", {

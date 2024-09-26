@@ -23,6 +23,7 @@
   import axios from 'axios';
   import router from '../router';
   import { loginApi,GetToken,DivisionData,CheckVacc } from '@/api';
+  import LocalStorageManager from "@/LocalStorageManger";
   
   export default {
     data() {
@@ -35,23 +36,13 @@
     methods: {
       async login() {
         try {
-          // const response = await GetToken();
-          // console.log(response);
-          // if(response.status===200)
-          //   localStorage.setItem('token', response.data);
-          // else
-          //   throw "連線失敗";
-
-          // var div = await DivisionData();
-          // console.log(div);
-          
-          
           
           var login =await loginApi(this.username,this.password);
           console.log(login);
           
           if(login.data.success){
-            localStorage.setItem('token', login.data.result.token);
+            LocalStorageManager.SetHospNo(login.data.result.hospNo);
+            LocalStorageManager.SetToken(login.data.result.token);
             router.push({ path: '/vaccoverview' });
           }
           else
